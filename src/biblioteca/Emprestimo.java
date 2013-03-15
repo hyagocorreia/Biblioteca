@@ -16,9 +16,11 @@ public class Emprestimo {
 	private String data, dataEntrega;
 	private static SimpleDateFormat format;
 	private Calendar c, cEntrega;
+	private int id;
 	
 	@SuppressWarnings("static-access")
-	public Emprestimo() {
+	public Emprestimo(){
+		id = new geraId().getIdAleatorio();
 		codLivros = new ArrayList<String>();
 		facade = new BibliotecaFacade();
 		format = new SimpleDateFormat("dd/MM/yyyy");
@@ -30,7 +32,14 @@ public class Emprestimo {
 		matUsuario = new String();
 	}
 
+	public int getId() {
+		return id;
+	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public void setDataEntrega(String dataEntrega) {
 		this.dataEntrega = dataEntrega;
 	}
@@ -114,8 +123,7 @@ public class Emprestimo {
 			return msg.toString();
 		}
 
-		return "___________________\nEMPRÉSTIMO\nO usuário "+nomeUsuario+" - "+matUsuario+"\nAlugou os livros: "
+		return "_______________________\nEMPRÉSTIMO\nID: "+id+"O usuário "+nomeUsuario+" - "+matUsuario+"\nAlugou os livros: "
 				+msg.toString()+"Em "+ data + "\nDevolução em "+ dataEntrega;
-	}
-	
+	}	
 }

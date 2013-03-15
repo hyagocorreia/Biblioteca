@@ -49,6 +49,7 @@ public class BibliotecaFacade {
 		List<Usuario> users = persistencia.recuperarUsuarios();
 		return users;
 	}
+	
 	public List<Livro> listarLivros() throws PersistenciaException{
 		List<Livro> livros = persistencia.recuperarLivros();
 		return livros;
@@ -184,7 +185,7 @@ public class BibliotecaFacade {
 		throw new TipoNaoEcontradoException("Código não encontrado!");
 	}
 	
-	public String verificar() throws PersistenciaException, ParseException{
+	public String verificarEmprestimo() throws PersistenciaException, ParseException{
 		return verify.verificar();
 	}
 
@@ -211,5 +212,20 @@ public class BibliotecaFacade {
 			}
 		}
 		throw new TipoNaoEcontradoException("Matrícula ou Código não encontrado!");
+	}
+
+	public Emprestimo getEmprestimo(int codigo) throws PersistenciaException, TipoNaoEcontradoException {
+		List<Emprestimo> emps = persistencia.recuperarEmprestimos();
+		for(Emprestimo e: emps){
+			if(e.getId() == codigo){
+				return e;
+			}
+		}
+		throw new TipoNaoEcontradoException("Código não encontrado!");
+	}
+
+	public boolean deletarEmprestimo(int codigo) throws PersistenciaException, TipoNaoEcontradoException {
+		Emprestimo e = getEmprestimo(codigo);
+		return persistencia.deletarEmprestimo(e);
 	}
 }

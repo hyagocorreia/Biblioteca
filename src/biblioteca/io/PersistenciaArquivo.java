@@ -27,16 +27,17 @@ public class PersistenciaArquivo implements Persistencia {
 		}
 	}
 
-	private File usuarioFile;
-	private File alunoFile;
-	private File livroFile;
-	private File emprestimoFile;
-
+	private File usuarioFile, alunoFile, livroFile, emprestimoFile;
+	String camUsuarios,camAlunos,camLivros,camEmprestimos;
 	public PersistenciaArquivo() {
-		usuarioFile = new File(dataDir.getPath() + "/usuarios.dat");
-		alunoFile = new File(dataDir.getPath() + "/alunos.dat");
-		livroFile = new File(dataDir.getPath() + "/livros.dat");
-		emprestimoFile = new File(dataDir.getPath() + "/emprestimos.dat");
+		camUsuarios = "/usuarios.dat";
+		camAlunos = "/alunos.dat";
+		camLivros = "/livros.dat";
+		camEmprestimos = "/emprestimos.dat";
+		usuarioFile = new File(dataDir.getPath() + camUsuarios);
+		alunoFile = new File(dataDir.getPath() + camAlunos);
+		livroFile = new File(dataDir.getPath() + camLivros);
+		emprestimoFile = new File(dataDir.getPath() + camEmprestimos);
 	}
 
 	public void salvarAluno(Aluno udat) throws PersistenciaException {
@@ -82,6 +83,23 @@ public class PersistenciaArquivo implements Persistencia {
 		}
 	}
 
+	public void salvar(Emprestimo emp) throws PersistenciaException {
+		StringBuilder line = new StringBuilder();
+		line.append(emp.getId() + ";" + emp.getUsuario() + ";" + emp.getData()+ ";" + emp.getDataEntrega());
+		for(String s: emp.getCodLivros()){
+			line.append(";"+s);
+		}
+		line.append("\n");
+		
+		try {
+			FileWriter out = new FileWriter(emprestimoFile, true);
+			out.write(line.toString());
+			out.close();
+		} catch (IOException e) {
+			throw new PersistenciaException(e);
+		}
+	}
+	
 	@SuppressWarnings("resource")
 	public List<Aluno> recuperarAlunos() throws PersistenciaException {
 		List<Aluno> usuarios = new ArrayList<Aluno>();
@@ -218,6 +236,50 @@ public class PersistenciaArquivo implements Persistencia {
 		}
 		return livros;
 	}
+
+	@SuppressWarnings("resource")
+	public List<Emprestimo> recuperarEmprestimos() throws PersistenciaException {
+		List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
+		if (!emprestimoFile.exists())
+			return emprestimos;
+
+		FileInputStream in;
+		int nlinha = 0;
+		try {
+			in = new FileInputStream(emprestimoFile);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+			String linha;
+			while ((linha = reader.readLine()) != null) {
+				nlinha++;
+				String array[] = linha.split(";");
+				int i;
+				Emprestimo emp = new Emprestimo();
+				for(i = 0; i<array.length;++i){
+					if(i==0)
+						emp.setId(Integer.parseInt(array[i]));
+					else if(i == 1)
+						emp.setUsuario(array[i]);
+					else if(i==2)
+						emp.setData(array[i]);
+					else if(i==3)
+						emp.setDataEntrega(array[i]);
+					else if(i>3){
+						for(String s: array){
+							emp.addLivro(s);
+						}
+					}else
+						throw new PersistenciaException("Erro no formato do arquivo!\n Arquivo: "+emprestimoFile.toString()+"\n Linha: "+nlinha);
+				}
+
+				emprestimos.add(emp);
+			}
+			reader.close();
+		} catch (Exception e) {
+			throw new PersistenciaException("Erro ao ler o arquivo "+emprestimoFile.toString()+", na linha:"+nlinha,e);
+		}
+		return emprestimos;
+	}
 	
 	public boolean deletarUsuario(Usuario udat) throws PersistenciaException{
 		List<Usuario> usuarios = recuperarUsuarios();
@@ -226,7 +288,7 @@ public class PersistenciaArquivo implements Persistencia {
 			FileWriter out;
 			File file = usuarioFile;  
 			file.delete();
-			usuarioFile = new File(dataDir.getPath() + "/usuarios.dat");
+			usuarioFile = new File(dataDir.getPath() + camUsuarios);
 			for(Usuario u: usuarios){
 				if(!u.getMatricula().equals(udat.getMatricula())){
 					StringBuilder line = new StringBuilder();
@@ -253,7 +315,7 @@ public class PersistenciaArquivo implements Persistencia {
 			FileWriter out;
 			File file = alunoFile;
 			file.delete();
-			alunoFile = new File(dataDir.getPath() + "/alunos.dat");
+			alunoFile = new File(dataDir.getPath() + camAlunos);
 			for(Aluno a: alunos){
 				if(!a.getMatricula().equals(aluno.getMatricula())){
 					StringBuilder line = new StringBuilder();
@@ -268,10 +330,7 @@ public class PersistenciaArquivo implements Persistencia {
 					nLinha++;
 				}
 			}
-			if(nLinha > 0){
-				return true;
-			}
-			return false;
+			return nLinha > 0;
 		}catch (Exception e) {
 			throw new PersistenciaException("Erro ao ler o arquivo "+usuarioFile.toString()+", na linha:"+nLinha,e);
 		}
@@ -284,7 +343,7 @@ public class PersistenciaArquivo implements Persistencia {
 			FileWriter out;
 			File file = livroFile;
 			file.delete();
-			livroFile = new File(dataDir.getPath() + "/livros.dat");
+			livroFile = new File(dataDir.getPath() + camLivros);
 			for(Livro l: livros){
 				if(!l.getTitulo().equals(livro.getTitulo()) && !l.getEdicao().equals(livro.getEdicao())){
 					StringBuilder line = new StringBuilder();
@@ -296,75 +355,39 @@ public class PersistenciaArquivo implements Persistencia {
 					nLinha++;
 				}
 			}
-			if(nLinha > 0){
-				return true;
-			}
-			return false;
+			return nLinha > 0;
 		}catch (Exception e) {
 			throw new PersistenciaException("Erro ao ler o arquivo "+livroFile.toString()+", na linha:"+nLinha,e);
 		}
 	}
 	
-	public void salvar(Emprestimo emp) throws PersistenciaException {
-		StringBuilder line = new StringBuilder();
-		line.append(emp.getUsuario() + ";" + emp.getData()+ ";" + emp.getDataEntrega());
-		for(String s: emp.getCodLivros()){
-			line.append(";"+s);
-		}
-		line.append("\n");
-		
-		try {
-			FileWriter out = new FileWriter(emprestimoFile, true);
-			out.write(line.toString());
-			out.close();
-		} catch (IOException e) {
-			throw new PersistenciaException(e);
-		}
-	}
-	
-	@SuppressWarnings("resource")
-	public List<Emprestimo> recuperarEmprestimos() throws PersistenciaException {
-		List<Emprestimo> emprestimos = new ArrayList<Emprestimo>();
-		if (!emprestimoFile.exists())
-			return emprestimos;
-
-		FileInputStream in;
-		int nlinha = 0;
-		try {
-			in = new FileInputStream(emprestimoFile);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-			String linha;
-			while ((linha = reader.readLine()) != null) {
-				nlinha++;
-				String array[] = linha.split(";");
-				int i;
-				Emprestimo emp = new Emprestimo();
-				for(i = 0; i<array.length;++i){
-					if(i == 0)
-						emp.setUsuario(array[i]);
-					else if(i==1)
-						emp.setData(array[i]);
-					else if(i==2)
-						emp.setDataEntrega(array[i]);
-					else if(i>2){
-						for(String s: array){
-							emp.addLivro(s);
-						}
-					}else
-						throw new PersistenciaException("Erro no formato do arquivo!\n Arquivo: "+emprestimoFile.toString()+"\n Linha: "+nlinha);
-				}
-
-				emprestimos.add(emp);
-			}
-			reader.close();
-		} catch (Exception e) {
-			throw new PersistenciaException("Erro ao ler o arquivo "+emprestimoFile.toString()+", na linha:"+nlinha,e);
-		}
-		return emprestimos;
-	}
-
 	public boolean deletarEmprestimo(Emprestimo e) throws PersistenciaException {
-		return false;
+		List<Emprestimo> emprestimos = recuperarEmprestimos();
+		int nLinha = 0;
+		try {
+			FileWriter out;
+			File file = emprestimoFile;
+			file.delete();
+			emprestimoFile = new File(dataDir.getPath() + camEmprestimos);
+			for(Emprestimo emp: emprestimos){
+				if(emp.getId()!=e.getId()){
+					StringBuilder line = new StringBuilder();
+					line.append(emp.getId() + ";" + emp.getUsuario() + ";" + emp.getData()+ ";" + emp.getDataEntrega());
+					for(String s: emp.getCodLivros()){
+						line.append(";"+s);
+					}
+					line.append("\n");
+					out = new FileWriter(emprestimoFile, true);
+					out.write(line.toString());
+					out.close();
+				}else{
+					nLinha++;
+				}
+			}
+			return nLinha > 0;
+		}catch (Exception ex) {
+			throw new PersistenciaException("Erro ao ler o arquivo "+emprestimoFile.toString()+", na linha:"+nLinha,ex);
+		}
+
 	}
 }

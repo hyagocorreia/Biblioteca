@@ -7,7 +7,6 @@ import logger.Logger;
 import biblioteca.Aluno;
 import biblioteca.BibliotecaException;
 import biblioteca.BibliotecaFacade;
-import biblioteca.BibliotecaRuntimeException;
 import biblioteca.EmprestimoException;
 import biblioteca.Livro;
 import biblioteca.TipoNaoEcontradoException;
@@ -29,8 +28,8 @@ public class Biblioteca {
 	
 	public void exibirMenu(){
 		try{
-			if(!facade.verificar().equals("")){
-				Util.alert(facade.verificar());
+			if(!facade.verificarEmprestimo().equals("")){
+				Util.alert(facade.verificarEmprestimo());
 			}
 			StringBuffer menu = new StringBuffer();
 			menu.append("==== SISTEMA DE CONTROLE DE BIBLIOTECA ====\n");
@@ -79,7 +78,13 @@ public class Biblioteca {
 					editar();
 					break;
 				case 5:
-					emprestimo();
+					opcao = Util.lerInteiro("Digite:\n1-Empréstimo\n2-Devolução");
+					if(opcao==1)
+						emprestimo();
+					else if(opcao==2)
+						devolucao();
+					else
+						Util.alert("Opção inválida!");
 					break;
 				default:
 					Util.alert("Opção inválida!");
@@ -91,7 +96,7 @@ public class Biblioteca {
 		}
 	}
 
-	private void listarLivros() throws PersistenciaException {
+	private void listarLivros() {
 		StringBuilder msg = new StringBuilder();
 		try {
 			List<Livro> us = facade.listarLivros();
@@ -102,7 +107,7 @@ public class Biblioteca {
 				Util.alert(msg.toString());
 			else
 				Util.alert("Nenhum encontrado!");
-		} catch (BibliotecaRuntimeException e) {
+		} catch (PersistenciaException e) {
 			Logger.getInstance().log(e);
 			msg.append("Erro ao recuperar livros. Ligue para o suporte!\n");
 		}
@@ -110,7 +115,7 @@ public class Biblioteca {
 		
 	}
 
-	private void listarUsuarios() throws PersistenciaException {
+	private void listarUsuarios() {
 		StringBuilder msg = new StringBuilder();
 		try {
 			int op = Util.lerInteiro("Listar?\nDigite:\n1-Aluno\n2-Professor\n3-Funcionário");
@@ -136,7 +141,7 @@ public class Biblioteca {
 				Util.alert(msg.toString());
 			else
 				Util.alert("Nenhum encontrado!");
-		} catch (BibliotecaRuntimeException e) {
+		} catch (PersistenciaException e) {
 			Logger.getInstance().log(e);
 			msg.append("Erro ao recuperar usuarios. Ligue para o suporte!\n");
 		}		
@@ -275,7 +280,7 @@ public class Biblioteca {
 		}
 	}
 	
-	private void editar() throws BibliotecaException {
+	private void editar(){
 		int opcao = Util.lerInteiro("Deseja Editar:\n1-Aluno\n2-Professor e Funcionário\n3-Livro");
 		String matricula = "";
 		if(opcao<1 || opcao>3){
@@ -324,6 +329,9 @@ public class Biblioteca {
 				} catch (TipoNaoEcontradoException e) {
 					Util.alert(e.getMessage());
 					Logger.getInstance().log(e);
+				} catch (BibliotecaException e) {
+					Util.alert(e.getMessage());
+					Logger.getInstance().log(e);
 				}
 			}else if(opcao == 2){
 				try{
@@ -363,6 +371,9 @@ public class Biblioteca {
 				} catch (TipoNaoEcontradoException e) {
 					Util.alert(e.getMessage());
 					Logger.getInstance().log(e);
+				} catch (BibliotecaException e) {
+					Util.alert(e.getMessage());
+					Logger.getInstance().log(e);
 				}
 			}else if(opcao == 3){
 				try{
@@ -398,6 +409,9 @@ public class Biblioteca {
 					Util.alert("Erro na leitura do arquivo! Tente novamente ou chame o suporte.");
 					Logger.getInstance().log(e2);
 				} catch (TipoNaoEcontradoException e) {
+					Util.alert(e.getMessage());
+					Logger.getInstance().log(e);
+				} catch (BibliotecaException e) {
 					Util.alert(e.getMessage());
 					Logger.getInstance().log(e);
 				}
@@ -447,4 +461,20 @@ public class Biblioteca {
 			Logger.getInstance().log(e3);
 		}
 	}
+	
+	private void devolucao() {
+		int codigo = Util.lerInteiro("Digite o código do empréstimo");
+		try {
+			if(facade.deletarEmprestimo(codigo)){
+				
+			}
+		} catch (PersistenciaException e) {
+			Util.alert(e.getMessage());
+			Logger.getInstance().log(e);
+		} catch (TipoNaoEcontradoException e) {
+			Util.alert(e.getMessage());
+			Logger.getInstance().log(e);
+		}
+	}
+
 }
