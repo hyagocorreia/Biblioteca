@@ -211,7 +211,14 @@ public class BibliotecaFacade {
 				return l;
 			}
 		}
-		throw new TipoNaoEcontradoException("Matrícula ou Código não encontrado!");
+		
+		List<Emprestimo> emps = persistencia.recuperarEmprestimos();
+		for(Emprestimo e: emps){
+			if(e.getId()==(Integer.parseInt(cod))){
+				return e;
+			}
+		}
+		throw new TipoNaoEcontradoException("Matrícula, Código ou ID não encontrado!");
 	}
 
 	public Emprestimo getEmprestimo(int codigo) throws PersistenciaException, TipoNaoEcontradoException {
@@ -228,4 +235,6 @@ public class BibliotecaFacade {
 		Emprestimo e = getEmprestimo(codigo);
 		return persistencia.deletarEmprestimo(e);
 	}
+
+
 }

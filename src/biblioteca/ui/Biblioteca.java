@@ -7,6 +7,7 @@ import logger.Logger;
 import biblioteca.Aluno;
 import biblioteca.BibliotecaException;
 import biblioteca.BibliotecaFacade;
+import biblioteca.Emprestimo;
 import biblioteca.EmprestimoException;
 import biblioteca.Livro;
 import biblioteca.TipoNaoEcontradoException;
@@ -60,13 +61,16 @@ public class Biblioteca {
 						Util.alert("Opção inválida!");
 					break;
 				case 2:
-					opcao = Util.lerInteiro("Digite:\n1-Listar Usuarios\n2-Listar Livros\n3-Pesquisar");
+					opcao = Util.lerInteiro("Digite:\n1-Listar Usuarios\n2-Listar Livros\n" +
+							"3-Listar Empréstimos\n4-Pesquisar");
 					if(opcao==1)
 						listarUsuarios();
 					else if(opcao==2)	
 						listarLivros();
-					else if(opcao==3){
-						cod = Util.lerString("Digite a matrícula do usuário ou o código do livro:");
+					else if(opcao==3)
+						listarEmprestimos();
+					else if(opcao==4){
+						cod = Util.lerString("Digite a matrícula do usuário, o código do livro ou o ID do empréstimo:");
 						consultar(cod);
 					}else
 						Util.alert("Opção inválida!");
@@ -145,6 +149,24 @@ public class Biblioteca {
 			Logger.getInstance().log(e);
 			msg.append("Erro ao recuperar usuarios. Ligue para o suporte!\n");
 		}		
+	}
+	
+	private void listarEmprestimos(){
+		StringBuilder msg = new StringBuilder();
+		try {
+			List<Emprestimo> emps = facade.listarEmprestimos();
+			for(Emprestimo e: emps){
+				msg.append(e.toString()+"\n");
+			}
+			if(!msg.toString().equals(""))
+				Util.alert(msg.toString());
+			else
+				Util.alert("Nenhum encontrado!");
+		} catch (PersistenciaException e) {
+			Logger.getInstance().log(e);
+			msg.append("Erro ao recuperar livros. Ligue para o suporte!\n");
+		}
+		Util.alert(msg.toString());
 	}
 	
 	private void cadastrarLivro() {
@@ -436,7 +458,8 @@ public class Biblioteca {
 		List<String> codigos = new ArrayList<String>();
 		boolean b = true;
 		String cod = Util.lerString("Digite o código do livro:");
-		codigos.add(cod);
+		String codi = cod.toUpperCase();
+		codigos.add(codi);
 		while(b){
 			int opcao = Util.lerInteiro("Deseja adicionar outro livro?\n1-Sim 2-Não:");
 			if(opcao == 1){

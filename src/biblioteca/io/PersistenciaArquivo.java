@@ -390,4 +390,24 @@ public class PersistenciaArquivo implements Persistencia {
 		}
 
 	}
+	
+	@SuppressWarnings("unused")
+	public int recuperarQtdeEmprestimos() throws PersistenciaException{
+		FileInputStream in;
+		if (!emprestimoFile.exists())
+			return 0;
+		int nlinha = 0;
+		try {
+			in = new FileInputStream(emprestimoFile);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			String linha;
+			while ((linha = reader.readLine()) != null) {
+				nlinha++;
+			}
+			reader.close();
+		} catch (Exception e) {
+			throw new PersistenciaException("Erro ao ler o arquivo "+emprestimoFile.toString()+", na linha:"+nlinha,e);
+		}
+		return nlinha;
+	}
 }

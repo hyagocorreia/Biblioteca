@@ -19,8 +19,8 @@ public class Emprestimo {
 	private int id;
 	
 	@SuppressWarnings("static-access")
-	public Emprestimo(){
-		id = new geraId().getIdAleatorio();
+	public Emprestimo() throws PersistenciaException{
+		id = new GeraId().getIdAleatorio();
 		codLivros = new ArrayList<String>();
 		facade = new BibliotecaFacade();
 		format = new SimpleDateFormat("dd/MM/yyyy");
@@ -123,7 +123,7 @@ public class Emprestimo {
 			return msg.toString();
 		}
 
-		return "_______________________\nEMPRÉSTIMO\nID: "+id+"O usuário "+nomeUsuario+" - "+matUsuario+"\nAlugou os livros: "
-				+msg.toString()+"Em "+ data + "\nDevolução em "+ dataEntrega;
+		return "_______________________\nEMPRÉSTIMO\nID: "+id+"\nO usuário "+nomeUsuario+" - "+matUsuario+
+				"\nAlugou os livros: "+msg.toString()+"Em "+ data + "\nDevolução em "+ dataEntrega;
 	}	
 }

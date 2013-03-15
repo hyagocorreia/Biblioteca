@@ -23,4 +23,6 @@ public interface Persistencia {
 	public boolean deletarAluno(Aluno a) throws PersistenciaException;
 	public boolean deletarLivro(Livro l) throws PersistenciaException;
 	public boolean deletarEmprestimo(Emprestimo e) throws PersistenciaException;
+	public int recuperarQtdeEmprestimos() throws PersistenciaException;
+	
 }

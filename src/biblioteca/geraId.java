@@ -1,31 +1,23 @@
 package biblioteca;
 
-import java.util.List;
-
+import biblioteca.io.Persistencia;
+import biblioteca.io.PersistenciaArquivo;
 import biblioteca.io.PersistenciaException;
 
-public class geraId {
-	private BibliotecaFacade facade;
+public class GeraId {
+	private Persistencia persistencia;
 
-	public geraId() {
-		facade = new BibliotecaFacade();
+	public GeraId() {
+		persistencia = new PersistenciaArquivo();
 	}
 	
-	public int getIdAleatorio() {
-		int i = (int)(Math.random()*10000000);
-		try {
-			List<Emprestimo> emps = facade.listarEmprestimos();
-			if(emps!=null){
-				for(Emprestimo e: emps){
-					if(e.getId() == i){
-						i = (int)(Math.random()*10000000);
-					}
-				}
-			}
-		} catch (PersistenciaException e1) {
-			
-		}
+	public int getIdAleatorio() throws PersistenciaException {
+		int qtde = getQtdeEmprestimos();
 		
-		return i;
+		return qtde++;
+	}
+	
+	public int getQtdeEmprestimos() throws PersistenciaException{
+		return persistencia.recuperarQtdeEmprestimos();
 	}
 }
