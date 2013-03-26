@@ -52,43 +52,78 @@ public class Biblioteca {
 					fim = true;
 					break;
 				case 1:
-					int opcao = Util.lerInteiro("Cadastrar:\n1-Usuario\n2-Livro");
-					if(opcao==1)
-						cadastrarUsuario();
-					else if(opcao==2)
-						cadastrarLivro();
-					else
-						Util.alert("Opção inválida!");
+					int opcao = Util.lerInteiro("Cadastrar:\n0-Voltar\n1-Usuario\n2-Livro");
+					if(opcao<0 || opcao>3){
+						while(opcao<0 || opcao>3)
+							opcao = Util.lerInteiro("Opção Inválida!\nCadastrar:\n0-Voltar\n1-Usuario\n2-Livro");
+					}else if(opcao>=0 || opcao<=3){
+						if(opcao==1)
+							cadastrarUsuario();
+						else if(opcao==2)
+							cadastrarLivro();
+						else if(opcao==0)
+							Util.alert("Voltando...");
+					}
 					break;
 				case 2:
-					opcao = Util.lerInteiro("Digite:\n1-Listar Usuarios\n2-Listar Livros\n" +
+					opcao = Util.lerInteiro("Digite:\n0-Voltar\n1-Listar Usuarios\n2-Listar Livros\n" +
 							"3-Listar Empréstimos\n4-Pesquisar");
-					if(opcao==1)
-						listarUsuarios();
-					else if(opcao==2)	
-						listarLivros();
-					else if(opcao==3)
-						listarEmprestimos();
-					else if(opcao==4){
-						cod = Util.lerString("Digite a matrícula do usuário, o código do livro ou o ID do empréstimo:");
-						consultar(cod);
-					}else
-						Util.alert("Opção inválida!");
+					if(opcao<0 || opcao>4){
+						while(opcao<0 || opcao>4)
+							opcao = Util.lerInteiro("Opção Inválida!\n0-Voltar\nDigite:\n1-Listar Usuarios\n2-Listar Livros\n" +
+									"3-Listar Empréstimos\n4-Pesquisar");
+					}else if(opcao>=0 || opcao<=4){
+						if(opcao==0)
+							Util.alert("Voltando...");
+						else if(opcao==1)
+							listarUsuarios();
+						else if(opcao==2)	
+							listarLivros();
+						else if(opcao==3)
+							listarEmprestimos();
+						else if(opcao==4){
+							cod = Util.lerString("Digite a matrícula do usuário, o código do livro ou o ID do empréstimo:");
+							consultar(cod);
+						}
+					}
 					break;
 				case 3:
-					deletar();
+					opcao = Util.lerInteiro("Digite:\n0-Voltar\n1-Deletar");
+					if(opcao<0 || opcao>1){
+						while(opcao<0 || opcao>1)
+							opcao = Util.lerInteiro("Opção Inválida!\nDigite:\n0-Voltar\n1-Deletar");
+					}else if(opcao>=0 || opcao<=1){
+						if(opcao==1)
+							deletar();
+						else
+							Util.alert("Voltando...");
+					}
 					break;
 				case 4:
-					editar();
+					opcao = Util.lerInteiro("Digite:\n0-Voltar\n1-Editar");
+					if(opcao<0 || opcao>1){
+						while(opcao<0 || opcao>1)
+							opcao = Util.lerInteiro("Opção Inválida!\nDigite:\n0-Voltar\n1-Editar");
+					}else if(opcao>=0 || opcao<=1){
+						if(opcao==1)
+							editar();
+						else
+							Util.alert("Voltando...");
+					}
 					break;
 				case 5:
-					opcao = Util.lerInteiro("Digite:\n1-Empréstimo\n2-Devolução");
-					if(opcao==1)
-						emprestimo();
-					else if(opcao==2)
-						devolucao();
-					else
-						Util.alert("Opção inválida!");
+					opcao = Util.lerInteiro("Digite:\n0-Voltar\n1-Empréstimo\n2-Devolução");
+					if(opcao<0 || opcao>2){
+						while(opcao<0 || opcao>2)
+							opcao = Util.lerInteiro("Opção Inválida!\n0-Voltar\nDigite:\n1-Empréstimo\n2-Devolução");
+					}else if(opcao>=0 || opcao<=2){
+						if(opcao==1)
+							emprestimo();
+						else if(opcao==2)
+							devolucao();
+						else
+							Util.alert("Voltando...");
+					}
 					break;
 				default:
 					Util.alert("Opção inválida!");
@@ -115,8 +150,6 @@ public class Biblioteca {
 			Logger.getInstance().log(e);
 			msg.append("Erro ao recuperar livros. Ligue para o suporte!\n");
 		}
-		Util.alert(msg.toString());
-		
 	}
 
 	private void listarUsuarios() {
@@ -166,7 +199,6 @@ public class Biblioteca {
 			Logger.getInstance().log(e);
 			msg.append("Erro ao recuperar livros. Ligue para o suporte!\n");
 		}
-		Util.alert(msg.toString());
 	}
 	
 	private void cadastrarLivro() {
@@ -175,11 +207,11 @@ public class Biblioteca {
 		int tipoInt = Util.lerInteiro("Tipo:\n1-Livro\n2-TCC\n3-Periódico");
 		
 		String tipo = null;
-		if(tipoInt > 3 && tipoInt < 1){
-			while(tipoInt > 3 && tipoInt < 1){
+		if(tipoInt > 3 || tipoInt < 1){
+			while(tipoInt > 3 || tipoInt < 1){
 				tipoInt = Util.lerInteiro("Tente novamente!\n1-Livro\n2-TCC\n3-Periódico");
 			}
-		}else{
+		}else if(tipoInt <= 3 || tipoInt >= 1){
 			if(tipoInt == 1)
 				tipo = "LIVRO";
 			else if(tipoInt == 2)
@@ -209,6 +241,18 @@ public class Biblioteca {
 	private void cadastrarUsuario() {
 		String nome = Util.lerString("Nome:");
 		String matricula = Util.lerString("Matricula:");
+		try {
+			while(facade.testarMatricula(matricula)){
+				matricula = Util.lerString("Matrícula já cadastrada no sistema!\n" +
+						"Tente novamente!\n Matrícula:");
+			}
+		} catch (EntradaInvalidaException e) {
+			Util.alert(e.getMessage());
+			Logger.getInstance().log(e);
+		} catch (PersistenciaException e) {
+			Util.alert("Erro na leitura do arquivo! Tente novamente ou chame o suporte.");
+			Logger.getInstance().log(e);
+		}
 		String telefone = Util.lerString("Telefone:");
 		String endereco = Util.lerString("Endereço:");
 		String email = Util.lerString("E-mail:");
@@ -218,10 +262,6 @@ public class Biblioteca {
 		String tipo = "";
 		
 		try{
-			while(facade.testarMatricula(matricula)){
-				matricula = Util.lerString("Matrícula já cadastrada no sistema!\n" +
-						"Tente novamente!\n Matrícula:");
-			}
 			if(tipoInt > 3 && tipoInt < 1){
 				while(tipoInt > 3 && tipoInt < 1){
 					tipoInt = Util.lerInteiro("Tente novamente!\n1-ALUNO\n2-PROFESSOR\n3-FUNCIONÁRIO");
@@ -246,6 +286,7 @@ public class Biblioteca {
 				Util.alert("ERRO!");
 		} catch (BibliotecaException e1) {
 			Util.alert(e1.getMessage());
+			Logger.getInstance().log(e1);
 		} catch(PersistenciaException e2){
 			Util.alert("Erro na gravação do arquivo! Tente novamente ou chame o suporte.");
 			Logger.getInstance().log(e2);
@@ -254,18 +295,19 @@ public class Biblioteca {
 	}
 	
 	private void deletar(){
-		int opcao = Util.lerInteiro("Deseja deletar:\n1-Aluno\n2-Professor\n3-Funcionário\n4-Livro");
+		int opcao = Util.lerInteiro("Deseja deletar:\n0-Voltar\n1-Aluno\n2-Professor\n3-Funcionário\n4-Livro");
 		String matricula = "";
-		if(opcao<1 && opcao>4){
-			while(opcao<1 && opcao>4){
-				opcao = Util.lerInteiro("Tente novamente:\n1-Aluno\n2-Professor\n3-Funcionário\n4-Livro");
+		if(opcao<0 || opcao>4){
+			while(opcao<0 || opcao>4){
+				opcao = Util.lerInteiro("Tente novamente:\n0-Voltar\n1-Aluno\n2-Professor\n3-Funcionário\n4-Livro");
 			}
-		}else{
+		}else if(opcao>=0 || opcao<=4){
 			if(opcao == 1){
 				try {
 					matricula = Util.lerString("Digite a matrícula para que possamos deletar:");
+					Aluno a = (Aluno) facade.getTipo(matricula);
 					facade.deletar(matricula);
-					Util.alert("Aluno deletado com sucesso!");
+					Util.alert("Aluno deletado com sucesso!\n"+a.toString());
 				} catch(PersistenciaException e2){
 					Util.alert("Erro na leitura do arquivo! Tente novamente ou chame o suporte.");
 					Logger.getInstance().log(e2);
@@ -276,8 +318,9 @@ public class Biblioteca {
 			}else if(opcao == 2 || opcao == 3){
 				try {
 					matricula = Util.lerString("Digite a matrícula para que possamos deletar:");
+					Usuario u = (Usuario) facade.getTipo(matricula);
 					facade.deletar(matricula);
-					Util.alert("Usuario deletado com sucesso!");
+					Util.alert("Usuario deletado com sucesso!\n"+u.toString());
 				} catch(PersistenciaException e2){
 					Util.alert("Erro na leitura do arquivo! Tente novamente ou chame o suporte.");
 					Logger.getInstance().log(e2);
@@ -289,8 +332,9 @@ public class Biblioteca {
 				try {
 					String codigo = Util.lerString("Digite o Código para que possamos deletar:");
 					codigo.toUpperCase();
+					Livro l = (Livro) facade.getTipo(codigo);
 					facade.deletar(codigo);
-					Util.alert("Livro deletado com sucesso!");
+					Util.alert("Livro deletado com sucesso!\n"+l.toString());
 				} catch(PersistenciaException e2){
 					Util.alert("Erro na leitura do arquivo! Tente novamente ou chame o suporte.");
 					Logger.getInstance().log(e2);
@@ -298,7 +342,8 @@ public class Biblioteca {
 					Util.alert(e.getMessage());
 					Logger.getInstance().log(e);
 				}
-			}
+			}else
+				Util.alert("Voltando...");
 		}
 	}
 	
@@ -306,7 +351,7 @@ public class Biblioteca {
 		int opcao = Util.lerInteiro("Deseja Editar:\n1-Aluno\n2-Professor e Funcionário\n3-Livro");
 		String matricula = "";
 		if(opcao<1 || opcao>3){
-			while(opcao<1 && opcao>3){
+			while(opcao<1 || opcao>3){
 				opcao = Util.lerInteiro("Tente novamente:\n1-Aluno\n2-Professor e Funcionário\n3-Livro");
 			}
 		}else{
@@ -489,7 +534,7 @@ public class Biblioteca {
 		int codigo = Util.lerInteiro("Digite o código do empréstimo");
 		try {
 			if(facade.deletarEmprestimo(codigo)){
-				
+				Util.alert("Devolução bem sucedida!");
 			}
 		} catch (PersistenciaException e) {
 			Util.alert(e.getMessage());

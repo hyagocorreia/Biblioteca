@@ -124,6 +124,6 @@ public class Emprestimo {
 		}
 
 		return "_______________________\nEMPRÉSTIMO\nID: "+id+"\nO usuário "+nomeUsuario+" - "+matUsuario+
-				"\nAlugou os livros: "+msg.toString()+"Em "+ data + "\nDevolução em "+ dataEntrega;
+				"\nAlugou os livros: "+msg.toString()+"Em "+ data + "\nDevolução prevista em "+ dataEntrega;
 	}	
 }

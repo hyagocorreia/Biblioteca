@@ -1,0 +1,32 @@
+>>> Segunda-feira, 25 Mar 2013 13:42:47 -0300
+biblioteca.TipoNaoEcontradoException: Código não encontrado!
+	at biblioteca.BibliotecaFacade.getEmprestimo(BibliotecaFacade.java:231)
+	at biblioteca.BibliotecaFacade.deletarEmprestimo(BibliotecaFacade.java:235)
+	at biblioteca.ui.Biblioteca.devolucao(Biblioteca.java:491)
+	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:89)
+	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
+>>> Segunda-feira, 25 Mar 2013 13:42:53 -0300
+biblioteca.TipoNaoEcontradoException: Código não encontrado!
+	at biblioteca.BibliotecaFacade.getEmprestimo(BibliotecaFacade.java:231)
+	at biblioteca.BibliotecaFacade.deletarEmprestimo(BibliotecaFacade.java:235)
+	at biblioteca.ui.Biblioteca.devolucao(Biblioteca.java:491)
+	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:89)
+	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
+>>> Segunda-feira, 25 Mar 2013 22:17:59 -0300
+biblioteca.TipoNaoEcontradoException: Matrícula, Código ou ID não encontrado!
+	at biblioteca.BibliotecaFacade.getTipo(BibliotecaFacade.java:221)
+	at biblioteca.ui.Biblioteca.consultar(Biblioteca.java:491)
+	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:86)
+	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
+>>> Segunda-feira, 25 Mar 2013 22:22:45 -0300
+biblioteca.TipoNaoEcontradoException: Matricula não encontrada!
+	at biblioteca.BibliotecaFacade.getUsuario(BibliotecaFacade.java:174)
+	at biblioteca.ui.Biblioteca.editar(Biblioteca.java:408)
+	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:109)
+	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
+>>> Segunda-feira, 25 Mar 2013 22:22:54 -0300
+biblioteca.TipoNaoEcontradoException: Matricula não encontrada!
+	at biblioteca.BibliotecaFacade.getUsuario(BibliotecaFacade.java:174)
+	at biblioteca.ui.Biblioteca.editar(Biblioteca.java:408)
+	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:109)
+	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
