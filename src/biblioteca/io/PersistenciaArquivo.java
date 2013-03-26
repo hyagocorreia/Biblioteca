@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import biblioteca.Aluno;
 import biblioteca.Emprestimo;
 import biblioteca.Livro;
@@ -18,10 +19,10 @@ public class PersistenciaArquivo implements Persistencia {
 	
 	private static File dataDir;
 	static {
-		URL url = PersistenciaArquivo.class.getResource("/");
-		File classesDir = new File(url.getPath());
-		dataDir = new File(classesDir.getParentFile().getPath() + "/data");
-
+		URL url = PersistenciaArquivo.class.getResource("../");
+		dataDir = new File(System.getProperty("user.home")+
+				System.getProperty("file.separator")+"BibData"+System.getProperty("file.separator"));
+		
 		if (!dataDir.exists()) {
 			dataDir.mkdir();
 		}
@@ -30,10 +31,10 @@ public class PersistenciaArquivo implements Persistencia {
 	private File usuarioFile, alunoFile, livroFile, emprestimoFile;
 	String camUsuarios,camAlunos,camLivros,camEmprestimos;
 	public PersistenciaArquivo() {
-		camUsuarios = "/usuarios.dat";
-		camAlunos = "/alunos.dat";
-		camLivros = "/livros.dat";
-		camEmprestimos = "/emprestimos.dat";
+		camUsuarios = System.getProperty("file.separator")+"usuarios.dat";
+		camAlunos = System.getProperty("file.separator")+"alunos.dat";
+		camLivros = System.getProperty("file.separator")+"livros.dat";
+		camEmprestimos = System.getProperty("file.separator")+"emprestimos.dat";
 		usuarioFile = new File(dataDir.getPath() + camUsuarios);
 		alunoFile = new File(dataDir.getPath() + camAlunos);
 		livroFile = new File(dataDir.getPath() + camLivros);

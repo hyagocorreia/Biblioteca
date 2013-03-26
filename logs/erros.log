@@ -1,32 +1,13 @@
->>> Segunda-feira, 25 Mar 2013 13:42:47 -0300
-biblioteca.TipoNaoEcontradoException: Código não encontrado!
-	at biblioteca.BibliotecaFacade.getEmprestimo(BibliotecaFacade.java:231)
-	at biblioteca.BibliotecaFacade.deletarEmprestimo(BibliotecaFacade.java:235)
-	at biblioteca.ui.Biblioteca.devolucao(Biblioteca.java:491)
-	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:89)
+>>> Terça-feira, 26 Mar 2013 14:33:13 -0300
+biblioteca.io.PersistenciaException: java.io.FileNotFoundException: C:\Users\Hyago Correianullueishansnullusuarios.dat (Acesso negado)
+	at biblioteca.io.PersistenciaArquivo.salvar(PersistenciaArquivo.java:68)
+	at biblioteca.BibliotecaFacade.criarUsuario(BibliotecaFacade.java:24)
+	at biblioteca.ui.Biblioteca.cadastrarUsuario(Biblioteca.java:277)
+	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:61)
 	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
->>> Segunda-feira, 25 Mar 2013 13:42:53 -0300
-biblioteca.TipoNaoEcontradoException: Código não encontrado!
-	at biblioteca.BibliotecaFacade.getEmprestimo(BibliotecaFacade.java:231)
-	at biblioteca.BibliotecaFacade.deletarEmprestimo(BibliotecaFacade.java:235)
-	at biblioteca.ui.Biblioteca.devolucao(Biblioteca.java:491)
-	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:89)
-	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
->>> Segunda-feira, 25 Mar 2013 22:17:59 -0300
-biblioteca.TipoNaoEcontradoException: Matrícula, Código ou ID não encontrado!
-	at biblioteca.BibliotecaFacade.getTipo(BibliotecaFacade.java:221)
-	at biblioteca.ui.Biblioteca.consultar(Biblioteca.java:491)
-	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:86)
-	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
->>> Segunda-feira, 25 Mar 2013 22:22:45 -0300
-biblioteca.TipoNaoEcontradoException: Matricula não encontrada!
-	at biblioteca.BibliotecaFacade.getUsuario(BibliotecaFacade.java:174)
-	at biblioteca.ui.Biblioteca.editar(Biblioteca.java:408)
-	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:109)
-	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
->>> Segunda-feira, 25 Mar 2013 22:22:54 -0300
-biblioteca.TipoNaoEcontradoException: Matricula não encontrada!
-	at biblioteca.BibliotecaFacade.getUsuario(BibliotecaFacade.java:174)
-	at biblioteca.ui.Biblioteca.editar(Biblioteca.java:408)
-	at biblioteca.ui.Biblioteca.exibirMenu(Biblioteca.java:109)
-	at biblioteca.ui.Biblioteca.main(Biblioteca.java:27)
+Caused by: java.io.FileNotFoundException: C:\Users\Hyago Correianullueishansnullusuarios.dat (Acesso negado)
+	at java.io.FileOutputStream.open(Native Method)
+	at java.io.FileOutputStream.<init>(Unknown Source)
+	at java.io.FileWriter.<init>(Unknown Source)
+	at biblioteca.io.PersistenciaArquivo.salvar(PersistenciaArquivo.java:64)
+	... 4 more
