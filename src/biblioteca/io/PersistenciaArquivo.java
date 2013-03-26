@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class PersistenciaArquivo implements Persistencia {
 	
 	private static File dataDir;
 	static {
-		URL url = PersistenciaArquivo.class.getResource("../");
 		dataDir = new File(System.getProperty("user.home")+
 				System.getProperty("file.separator")+"BibData"+System.getProperty("file.separator"));
 		
