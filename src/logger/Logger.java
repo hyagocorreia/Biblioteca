@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,9 +15,9 @@ public class Logger {
 
 	static {
 		format = new SimpleDateFormat("EEEEEEEEE, d MMM yyyy HH:mm:ss Z");
-		URL url = Logger.class.getResource("/");
-		File classesDir = new File(url.getPath());
-		logsDir = new File(classesDir.getParentFile().getPath() + "/logs");
+		logsDir = new File(System.getProperty("user.home")+
+				System.getProperty("file.separator")+"BibData"+System.getProperty("file.separator")+"Logs"+
+				System.getProperty("file.separator"));
 
 		if (!logsDir.exists()) {
 			logsDir.mkdir();
@@ -37,7 +36,7 @@ public class Logger {
 	}
 	
 	private Logger(){
-		errosFile = new File(logsDir.getPath() + "/erros.log");	
+		errosFile = new File(logsDir.getPath() + System.getProperty("file.separator")+"erros.log");	
 	}
 	
 	public void log(String msg){
